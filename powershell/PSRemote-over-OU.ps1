@@ -1,6 +1,5 @@
 #OU Name to target - You can find this by enabling Advanced settings in Active Directory Users and Computers and selecting Attributes when right clicking an OU to view properties
 $OU = "OU=YourOU,DC=YourDC,DC=com"
-
 #Define your script to run on the workstations here
 $Script = "ipconfig /flushdns"
 
