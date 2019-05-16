@@ -34,8 +34,10 @@ try:
 
                     #Start extracting VDI info
                     vdi = vbd_record["VDI"]
+
                     #Store the VDI record
                     vdi_record = session.xenapi.VDI.get_record(vdi)
+
                     #Store the UUID for the VDI
                     vdi_uuid = vdi_record["uuid"]
                     vdi_utilization = vdi_record["physical_utilisation"]
@@ -44,7 +46,7 @@ try:
                     print("Found VDI: ", vdi_uuid, "On: ", name, ": ", vm_uuid)
                     print("Old size was: ", vdi_current_size, "Auto Resize would bring it to: ", vdi_new_size)
                     print("Physical utilization:", vdi_utilization, "Reference old size for allocated above")
-                    #print("Attempting test resize")
+                    #Store the automatic back up name
                     backup_name = name + " " + now
                     session.xenapi.VM.snapshot(session.xenapi.VM.get_by_uuid(vm_uuid), backup_name)
                     session.xenapi.VM.shutdown(session.xenapi.VM.get_by_uuid(vm_uuid))
@@ -52,14 +54,6 @@ try:
                     session.xenapi.VM.start(session.xenapi.VM.get_by_uuid(vm_uuid), False, False)
                     print("VDI has been resized")
 
-                    #TODO write resize function which takes in 2 arguments (VM UUID, VDI UUID) which will then shutdown the VM, add the storage and start the VM back up syncronously
-                    
-                 
-                #print("This is the VM Record for this VBD ", vbd_record["VM"],"\n This is the VDI record for this VBD ", vbd_record["VDI"])
-                #print(session.xenapi.VDI.get_record(vbd_record["VDI"]))
-                #print(session.xenapi.VDI.get_record(vbd_record["VDI"]))
-                #print(vbd_record["uuid"])
-    #Get all VDI's and list them
-
+#Finally close our xenapi session cleanly.
 finally:
     session.xenapi.session.logout()
